@@ -25,7 +25,7 @@ func GetInventory() (model.Inventory, error) {
 		Price:        mockutil.GenFloat(1, 10),
 		RSCustomerID: mockutil.GenUUID(),
 		SKU:          mockutil.SkuDict(name),
-		Timestamp:    time.Now().Unix(),
+		Timestamp:    mockutil.GenTime(),
 		TotalWeight:  mockutil.GenFloat(300, 1000),
 		UPC:          barcode,
 	}, nil

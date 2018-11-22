@@ -169,3 +169,8 @@ func GenLot() string {
 	// return dictionary[item]
 
 }
+
+func GenTime() int64 {
+	timeGen := time.Now().Unix() + int64(GenInt(200, 1000))
+	return timeGen
+}

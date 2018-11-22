@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/TerrexTech/agg-generate-data/collection"
 	"github.com/TerrexTech/agg-generate-data/model"
@@ -34,7 +35,7 @@ func validateEnv() error {
 func main() {
 
 	//Change sample size here
-	sampleSize := 1000
+	// sampleSize := 3000
 
 	log.Println("Reading environment file")
 	err := godotenv.Load("./.env")
@@ -57,6 +58,7 @@ func main() {
 	collectionDev := os.Getenv("MONGO_DEVICE_COLLECTION")
 	collectionInv := os.Getenv("MONGO_INV_COLLECTION")
 	collectionMet := os.Getenv("MONGO_METRIC_COLLECTION")
+	sampleSize := os.Getenv("SAMPLE_SIZE")
 
 	log.Println(hosts)
 	config := mongo.ClientConfig{
@@ -90,8 +92,13 @@ func main() {
 	//Generating and Inserting data
 	inventory := []model.Inventory{}
 
-	for i := 0; i < sampleSize; i++ {
+	samplesize, err := strconv.Atoi(sampleSize)
+	if err != nil {
+		log.Println(err)
+	}
+	for i := 0; i < samplesize; i++ {
 		inv, err := sample.GetInventory()
+		log.Println(inv.Timestamp)
 		if err != nil {
 			log.Println(err)
 		}
@@ -147,7 +154,7 @@ func main() {
 		metric = append(metric, met)
 	}
 
-	log.Println(metric)
+	// log.Println(metric)
 
 	err = sample.InsertMetric(metric, metricColl)
 	if err != nil {
