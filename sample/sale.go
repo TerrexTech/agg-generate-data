@@ -14,6 +14,7 @@ func GenSale(inv model.Inventory, invColl *mongo.Collection) (*mgo.UpdateResult,
 	var soldWeight float64
 
 	soldWeight = mockutil.GenFloat(inv.SoldWeight, inv.TotalWeight)
+	flashWeight := mockutil.GenFloat(1, soldWeight)
 
 	itemID := inv.ItemID.String()
 
@@ -22,8 +23,9 @@ func GenSale(inv model.Inventory, invColl *mongo.Collection) (*mgo.UpdateResult,
 	}
 
 	update := &map[string]interface{}{
-		"soldWeight": soldWeight,
-		"dateSold":   time.Now().Unix(),
+		"soldWeight":      soldWeight,
+		"flashSaleWeight": flashWeight,
+		"dateSold":        time.Now().Unix(),
 	}
 	updateResult, err := invColl.UpdateMany(filter, update)
 	if err != nil {

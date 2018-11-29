@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/TerrexTech/agg-generate-data/collection"
 	"github.com/TerrexTech/agg-generate-data/model"
@@ -60,7 +61,7 @@ func main() {
 	collectionMet := os.Getenv("MONGO_METRIC_COLLECTION")
 	sampleSize := os.Getenv("SAMPLE_SIZE")
 
-	log.Println(hosts)
+	// log.Println(hosts)
 	config := mongo.ClientConfig{
 		Hosts:               []string{hosts},
 		Username:            username,
@@ -98,11 +99,14 @@ func main() {
 	}
 	for i := 0; i < samplesize; i++ {
 		inv, err := sample.GetInventory()
-		log.Println(inv.Timestamp)
+		log.Println(inv.DateArrived)
+		log.Println(inv.Timestamp, "Timestamp")
+		log.Println(inv.ProjectedDate, "ProjectedDate")
 		if err != nil {
 			log.Println(err)
 		}
 		inventory = append(inventory, inv)
+		time.Sleep(100 * time.Millisecond)
 	}
 
 	err = sample.InsertInventory(inventory, invColl)
@@ -125,10 +129,10 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
-		_, err = sample.GenFlashSale(v, invColl)
-		if err != nil {
-			log.Println(err)
-		}
+		// _, err = sample.GenFlashSale(v, invColl)
+		// if err != nil {
+		// 	log.Println(err)
+		// }
 	}
 
 	device := []model.Device{}
@@ -167,9 +171,9 @@ func main() {
 	// }
 
 	// fsale, err := sample.GetFlashSale(v)
-	// 	if err != nil {
-	// 		log.Println(err)
-	// 	}
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 
 	// // inventory = append(inventory, sa)
 	// inventory = append(inventory, fsale)
@@ -178,9 +182,9 @@ func main() {
 	// 	log.Println(v)
 	// }
 
-	// // for _, v := range device {
-	// // 	log.Println(v)
-	// // }
+	// for _, v := range device {
+	// 	log.Println(v)
+	// }
 
 	// for _, v := range metric {
 	// 	log.Println(v)

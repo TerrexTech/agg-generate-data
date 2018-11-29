@@ -13,21 +13,25 @@ import (
 func GetInventory() (model.Inventory, error) {
 	barcode := mockutil.GenBarcode()
 	name := mockutil.GenFruitName()
+	dateArr := mockutil.GenTime()
+	timestamp := dateArr + int64(mockutil.GenInt(7200, 15000))
+	projectedDate := time.Unix(dateArr, 0).AddDate(0, 0, mockutil.GenInt(7, 15)).Unix()
 
 	return model.Inventory{
 		ItemID: mockutil.GenUUID(),
 		// Barcode:      mockutil.GenBarcode(),
-		DateArrived:  time.Now().Unix(),
-		DeviceID:     mockutil.GenUUID(),
-		Lot:          mockutil.GenLot(),
-		Name:         name,
-		Origin:       mockutil.GenOrigin(),
-		Price:        mockutil.GenFloat(1, 10),
-		RSCustomerID: mockutil.GenUUID(),
-		SKU:          mockutil.SkuDict(name),
-		Timestamp:    mockutil.GenTime(),
-		TotalWeight:  mockutil.GenFloat(300, 1000),
-		UPC:          barcode,
+		DateArrived:   dateArr,
+		DeviceID:      mockutil.GenUUID(),
+		Lot:           mockutil.GenLot(),
+		Name:          name,
+		Origin:        mockutil.GenOrigin(),
+		Price:         mockutil.GenFloat(1, 10),
+		RSCustomerID:  mockutil.GenUUID(),
+		SKU:           mockutil.SkuDict(name),
+		Timestamp:     timestamp,
+		TotalWeight:   mockutil.GenFloat(300, 1000),
+		UPC:           barcode,
+		ProjectedDate: projectedDate,
 	}, nil
 }
 
@@ -35,7 +39,7 @@ func InsertInventory(inv []model.Inventory, invColl *mongo.Collection) error {
 	for _, v := range inv {
 		_, err := invColl.InsertOne(v)
 		if err != nil {
-			err = errors.Wrap(err, "Unable to insert data")
+			err = errors.Wrap(err, "Unable to insert data - inv")
 			log.Println(err)
 			return err
 		}

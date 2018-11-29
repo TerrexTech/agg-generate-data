@@ -37,7 +37,7 @@ func GenDonate(inv model.Inventory, invColl *mongo.Collection) (*mgo.UpdateResul
 	}
 	updateResult, err := invColl.UpdateMany(filter, update)
 	if err != nil {
-		err = errors.Wrap(err, "Unable to update event - Sale")
+		err = errors.Wrap(err, "Unable to update event - Donate")
 		return nil, err
 	}
 

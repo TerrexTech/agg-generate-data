@@ -16,7 +16,7 @@ func GetDevice(inv model.Inventory) (model.Device, error) {
 		DateInstalled: inv.Timestamp,
 		Lot:           inv.Lot,
 		Name:          inv.Name,
-		Status:        "Healthy",
+		Status:        "Normal",
 		SKU:           inv.SKU,
 	}, nil
 }

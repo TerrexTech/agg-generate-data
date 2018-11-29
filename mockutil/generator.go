@@ -20,13 +20,13 @@ func GenUUID() uuuid.UUID {
 }
 
 func GenInt(min int, max int) int {
-	s1 := rand.NewSource(time.Now().UnixNano())
-	r1 := rand.New(s1)
-	return r1.Intn(max-min) + min
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(max-min) + min
 }
 
 func GenFloat(min float64, max float64) float64 {
 	s1 := rand.NewSource(time.Now().UnixNano())
+	// time.Sleep(1 * time.Millisecond)
 	r1 := rand.New(s1)
 	random := min + r1.Float64()*(max-min)
 	return random
@@ -171,6 +171,6 @@ func GenLot() string {
 }
 
 func GenTime() int64 {
-	timeGen := time.Now().Unix() + int64(GenInt(200, 1000))
+	timeGen := time.Now().AddDate(0, 0, GenInt(-6, -1)).Unix()
 	return timeGen
 }
